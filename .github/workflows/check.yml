@@ -1,0 +1,20 @@
+name: check
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python compiles
+        run: python3 -m py_compile installer/setup.py tools/update_catalog.py
+      - name: catalog.json is valid
+        run: python3 -c "import json; c=json.load(open('installer/catalog.json')); assert c['models']; print(len(c['models']), 'models')"
+      - name: shell syntax
+        run: bash -n setup.sh
+      - name: PowerShell parses
+        shell: pwsh
+        run: |
+          $e = $null; $t = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile("$PWD/installer/setup.ps1", [ref]$t, [ref]$e)
+          if ($e.Count) { $e | ForEach-Object { "$($_.Extent.StartLineNumber): $($_.Message)" }; exit 1 }
+          if ((Get-Content -Raw installer/setup.ps1) -match '[^\x00-\x7F]') { 'setup.ps1 must stay ASCII (PowerShell 5.1)'; exit 1 }

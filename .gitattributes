@@ -1,0 +1,4 @@
+# Setup.bat is stored with CRLF so it also works when downloaded on its own
+*.bat  -text
+*.sh   text eol=lf
+*.py   text eol=lf

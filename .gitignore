@@ -1,0 +1,10 @@
+# files setup creates on the drive
+/models/
+/runtimes/
+/system/
+/output/
+/START-AI.bat
+/start-ai.sh
+/README-DRIVE.txt
+*.part
+__pycache__/
