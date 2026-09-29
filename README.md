@@ -13,7 +13,22 @@ One setup program does the whole job:
 
 Run setup again at any time to add or remove models, or to update the engines.
 
-> Why not just use llama.cpp? This project **uses** llama.cpp and doesn't replace it. It automates everything around it. See [docs/WHY.md](docs/WHY.md) for an honest comparison with plain llama.cpp, llamafile, Ollama, LM Studio and KoboldCpp.
+## Why this instead of a portable llama.cpp folder?
+
+This project runs **the same llama.cpp** under the hood, so chat speed is identical. The difference is everything a bare portable llama.cpp folder leaves for you to do by hand:
+
+| | Portable llama.cpp folder | Portable AI Drive |
+|---|---|---|
+| Which build do I need? | You guess between CUDA 12/13, Vulkan, HIP and CPU, plus the matching cudart zip | Detected from your GPU and driver. A Vulkan fallback is installed too, so the drive works on other PCs |
+| Which model and size fits my PC? | Trial and error until something runs out of memory | Every model is rated for this PC, and the best quant that fits is picked automatically |
+| Are my 10 GB downloads intact? | Unknown | Every file is checked against its SHA-256. Interrupted downloads resume |
+| GPU layers and context size | Hand-tuned per model, per PC | llama.cpp's `--fit` at launch, plus a measured max-context preset for each model |
+| Switching models | Restart the server with new arguments | One server with a model picker in the web page, or `"model": "..."` from any app |
+| Images and voice | Not included | Qwen-Image 2.1 (stable-diffusion.cpp) and Qwen3-TTS (KoboldCpp), set up the same way |
+| Newer formats | Stock builds can't read 1-bit / ternary Bonsai files | Uses the PrismML build of llama.cpp, which can |
+| Launching | Write your own .bat files | `START-AI.bat` / `start-ai.sh` menus, generated for the models you installed |
+
+More detail, and when you *shouldn't* use this, is in [docs/WHY.md](docs/WHY.md), which also compares llamafile, KoboldCpp, Ollama and LM Studio.
 
 ---
 
